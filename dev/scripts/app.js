@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
 	BrowserRouter as Router,
-	NavLink as Link,
+	Link, 
 	Route
 } from 'react-router-dom';
 
@@ -18,99 +18,178 @@ firebase.initializeApp(config);
 
 const eventListRef = firebase.database().ref('/events');
 
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
 class NewEventForm extends React.Component {
-	constructor () {
-		super(); 
+	constructor(props) {
+		super(props);
 		this.state = {
 			name: '',
 			location: '',
 			date: '',
-			time: '',
+			time: ''
 		}
-		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-	}
-	handleSubmit(event) {
-		event.preventDefault();
-		eventListRef.push()
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	handleChange(event) {
 		this.setState({
 			[event.target.name]: event.target.value
 		})
 	}
+	handleSubmit(event) {
+		event.preventDefault();
+		this.props.handleSubmit({
+			name: this.state.name,
+			location: this.state.location,
+			date: this.state.date,
+			time: this.state.time
+		});
+		this.setState({
+			name: '',
+			location: '',
+			date: '',
+			time: ''
+		})
+	}
 	render() {
 		return (
 			<form onSubmit={this.handleSubmit}>
 				<h2>Add New Event</h2>
-				<label htmlFor="name"></label>
-				<input value={this.state.name} onChange={this.handleChange} name="fullName" type="text"/>
+				<label htmlFor="name">Name</label>
+				<input value={this.state.name} onChange={this.handleChange} name="name" type="text"/>
 
-				<label htmlFor="location"></label>
+				<label htmlFor="location">Location</label>
 				<input value={this.state.location} onChange={this.handleChange} name="location" type="text"/>
 
-				<label htmlFor="date"></label>
+				<label htmlFor="date">Date</label>
 				<input value={this.state.date} onChange={this.handleChange} name="date"type="date"/>
 
-				<label htmlFor="time"></label>
+				<label htmlFor="time">Time</label>
 				<input value={this.state.time} onChange={this.handleChange} name="time"type="text"/>
+
+				<input type="submit" value="Submit"/>
 			</form>
 		)
 	}
 }
 
-class NewEvent extends React.Component {
+class Events extends React.Component {
+	constructor(props) {
+		super(props);
+	}
 	render() {
 		return (
-
+			<ul>
+				{this.props.eventList.map( (event) => {
+					return (
+						<li key={event.key}>
+							<h3>{event.event.location}</h3>
+							<h4>{event.event.date}</h4>
+							<h4>{event.event.time}</h4>
+							<p>{event.event.name}</p>
+						</li>
+					)
+				})}
+			</ul>
 		)
 	}
 }
 
 class App extends React.Component {
+	constructor () {
+		super(); 
+		this.state = {
+			user: null,
+			loggedIn: false,
+			events: []
+		}
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.login = this.login.bind(this);
+		this.logout = this.logout.bind(this);
+	}
 	render() {
+		const displayEvents = () => {
+			if (this.state.loggedIn === true) {
+				return (
+					<main>
+						<button onClick={this.logout}>Log Out</button>
+						<NewEventForm name={this.state.name} location={this.state.location} date={this.state.date} time={this.state.time} handleChange={this.handleChange} handleSubmit={this.handleSubmit}/>
+						<Link to="/events">Go to Events</Link>
+					</main>	
+				)
+			} else {
+				return (
+					<main>
+						<button onClick={this.login}>Login</button>
+					</main>
+				)
+			}	
+		}
 		return (
-			<main>
-				<NewEventForm/>
-			</main>
+			<Router>
+				<main>
+					<h1>Where My Ballers At?</h1>
+					{displayEvents()}
+					<Route exact path="/events" render={ () => <Events eventList={this.state.events} />}/>
+				</main>	
+			</Router>
 		)
+	}
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true
+				})
+
+				const userId = user.userId
+				
+				eventListRef.on('value', (snapshot) => {
+					const events = snapshot.val();
+					const currentEvents = [];
+					for(let key in events) {
+						currentEvents.push({
+							key: key,
+							event: events[key]
+						});
+					}
+					this.setState({
+						events: currentEvents
+					})
+				});	
+			} else {
+				this.setState({
+					user: null,
+					loggedIn: false
+				})
+			}
+		})
+	}
+	login () {
+		firebase.auth().signInWithPopup(provider)
+			.then( (result) => {
+				const user = result.user
+				this.setState({
+					user,
+					loggedIn: true
+				})
+			});
+	}
+	logout () {
+		auth.signOut()
+			.then( () => {
+				this.setState({
+					user: null,
+					loggedIn: false
+				})
+			});
+	}
+	handleSubmit(formData) {
+		eventListRef.push(formData);
 	}
 }
 
 ReactDOM.render(<App/>, document.getElementById('app'));
-
-// class NewUserSignIn extends React.Component {
-// 	constructor() {
-// 		super();
-// 		this.state = {
-// 			email: '',
-// 			password: ''
-// 		}
-// 		this.handleInputChange = this.handleInputChange.bind(this);
-// 		this.handleSubmit = this.handleSubmit.bind(this);
-// 	}
-// 	handleInputChange(event) {
-// 		const target = event.target;
-// 		const name = target.name;
-// 		const value = target.value;
-// 		this.setState({
-// 			[name]: value
-// 		})
-// 	}
-// 	handleSubmit(event) {
-// 		event.preventDefault();
-// 		console.log(this.state.email, this.state.password);
-// 	}
-// 	render() {
-// 		return (
-// 			<form id="newUser" onSubmit={this.handleSubmit}>
-// 				<h2>New User</h2>
-// 				<label>E-mail:</label>
-// 				<input name="email" type="email" value={this.state.email} onChange={this.handleInputChange}/>
-// 				<label>Password:</label>
-// 				<input name="password" type="password" value={this.state.password} onChange={this.handleInputChange}/>
-// 				<input type="submit" value="Submit" />
-// 			</form>
-// 		);
-// 	}
-// }
