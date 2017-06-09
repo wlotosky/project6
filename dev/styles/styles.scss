@@ -1,0 +1,11 @@
+.event-list {
+	display: flex;
+	flex-wrap: wrap;
+	.event-listItem {
+		list-style: none;
+		width: calc(25%; - (75px / 3));
+		margin-right: 25px;
+	}
+	.event-listItem:nth-of-type(4n)
+	margin-right: none;
+}

@@ -5,6 +5,7 @@ import {
 	Link, 
 	Route
 } from 'react-router-dom';
+import NewEventForm from './newEventForm.js'
 
 var config = {
 	apiKey: "AIzaSyAIqYoctbM99MIr6El8zRHGwg-s6FCBFoM",
@@ -17,83 +18,58 @@ var config = {
 firebase.initializeApp(config);
 
 const eventListRef = firebase.database().ref('/events');
+const userListRef = firebase.database().ref('/users');
 
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-class NewEventForm extends React.Component {
+class EventsDisplay extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: '',
-			location: '',
-			date: '',
-			time: ''
+			user: this.props.user
 		}
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-	handleChange(event) {
-		this.setState({
-			[event.target.name]: event.target.value
-		})
-	}
-	handleSubmit(event) {
-		event.preventDefault();
-		this.props.handleSubmit({
-			name: this.state.name,
-			location: this.state.location,
-			date: this.state.date,
-			time: this.state.time
-		});
-		this.setState({
-			name: '',
-			location: '',
-			date: '',
-			time: ''
-		})
+		this.handleClick = this.handleClick.bind(this);
 	}
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<h2>Add New Event</h2>
-				<label htmlFor="name">Name</label>
-				<input value={this.state.name} onChange={this.handleChange} name="name" type="text"/>
-
-				<label htmlFor="location">Location</label>
-				<input value={this.state.location} onChange={this.handleChange} name="location" type="text"/>
-
-				<label htmlFor="date">Date</label>
-				<input value={this.state.date} onChange={this.handleChange} name="date"type="date"/>
-
-				<label htmlFor="time">Time</label>
-				<input value={this.state.time} onChange={this.handleChange} name="time"type="text"/>
-
-				<input type="submit" value="Submit"/>
-			</form>
-		)
-	}
-}
-
-class Events extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		return (
-			<ul>
+			<ul className="event-list">
 				{this.props.eventList.map( (event) => {
 					return (
-						<li key={event.key}>
-							<h3>{event.event.location}</h3>
-							<h4>{event.event.date}</h4>
-							<h4>{event.event.time}</h4>
-							<p>{event.event.name}</p>
-						</li>
+						<Link to={`/events/${event.key}`}>
+							<li key={event.key} className="event-listItem">
+								<h3>{event.event.location}</h3>
+								<h4>{event.event.date}</h4>
+								<h4>{event.event.time}</h4>
+								<p>{event.event.name}</p>
+								<button onClick={ () => handleClick(`/events/${event.key}/attendees/`)}>I'm attending</button>
+							</li>
+						</Link>
 					)
 				})}
 			</ul>
 		)
+	}
+	handleClick(path) {
+		const attendeeRef = firebase.database().ref(path);
+		attendeeRef.push({[this.state.user.uid]:this.state.user.displayName})
+	}
+}
+
+class Event extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	displayEvent() {
+
+	}
+	render() {
+		<li key={event.key} className="event-listItem">
+			<h3>{event.event.location}</h3>
+			<h4>{event.event.date}</h4>
+			<h4>{event.event.time}</h4>
+			<p>{event.event.name}</p>
+		</li>
 	}
 }
 
@@ -115,8 +91,8 @@ class App extends React.Component {
 				return (
 					<main>
 						<button onClick={this.logout}>Log Out</button>
-						<NewEventForm name={this.state.name} location={this.state.location} date={this.state.date} time={this.state.time} handleChange={this.handleChange} handleSubmit={this.handleSubmit}/>
 						<Link to="/events">Go to Events</Link>
+						<Link to="/addNewEvent">Go to Add New Event Page</Link> 
 					</main>	
 				)
 			} else {
@@ -132,7 +108,9 @@ class App extends React.Component {
 				<main>
 					<h1>Where My Ballers At?</h1>
 					{displayEvents()}
-					<Route exact path="/events" render={ () => <Events eventList={this.state.events} />}/>
+					<Route exact path="/addNewEvent" render={ () => <NewEventForm handleSubmit={this.handleSubmit} userId={this.state.user.uid}/>} />
+					<Route exact path="/events" render={ () => <EventsDisplay eventList={this.state.events} user={this.state.user} />}/>
+					<Route exact path="/events/:event" render={ () => <Event eventInfo={this.state.events}/>} />
 				</main>	
 			</Router>
 		)
@@ -171,11 +149,16 @@ class App extends React.Component {
 	login () {
 		firebase.auth().signInWithPopup(provider)
 			.then( (result) => {
-				const user = result.user
+				const user = result.user;
+				const uniqueUserId = result.user.uid;
 				this.setState({
 					user,
 					loggedIn: true
-				})
+				});
+				userListRef.push(
+					uniqueUserId: {
+						events: {}
+					});
 			});
 	}
 	logout () {
