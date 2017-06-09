@@ -36,15 +36,16 @@ class EventsDisplay extends React.Component {
 			<ul className="event-list">
 				{this.props.eventList.map( (event) => {
 					return (
-						<Link to={`/events/${event.key}`}>
-							<li key={event.key} className="event-listItem">
-								<h3>{event.event.location}</h3>
-								<h4>{event.event.date}</h4>
-								<h4>{event.event.time}</h4>
-								<p>{event.event.name}</p>
-								<button onClick={ () => handleClick(`/events/${event.key}/attendees/`)}>I'm attending</button>
-							</li>
-						</Link>
+						<li key={event.key} className="event-listItem">
+							<h3>{event.event.location}</h3>
+							<h4>{event.event.date}</h4>
+							<h4>{event.event.time}</h4>
+							<p>{event.event.name}</p>
+							<button onClick={ () => this.handleClick(`/events/${event.key}/attendees/`)}>I'm attending</button>
+							<Link to={`/events/${event.key}`}>	
+								<button>Go to Event Page</button>
+							</Link>
+						</li>	
 					)
 				})}
 			</ul>
@@ -52,24 +53,32 @@ class EventsDisplay extends React.Component {
 	}
 	handleClick(path) {
 		const attendeeRef = firebase.database().ref(path);
-		attendeeRef.push({[this.state.user.uid]:this.state.user.displayName})
+		attendeeRef.push({[this.state.user.uid]:this.state.user.displayName});
 	}
 }
 
 class Event extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			name: '',
+			location: '',
+			date: '',
+			time: '',
+		}
 	}
-	displayEvent() {
-
-	}
+	componentDidMount() {
+		//In here use the props.param.event key and access the data from firebase
+		console.log(this.props, this.props.match, this.props.match.params, this.props.match.params.event);
+		// const singleEventRef = firebase.database().ref(`event/${this.props.match.params.event}`);
+		// const singleEventAttendeeRef = firebase.database().ref(`event/${this.props.match.params.event}/attendees`)
+	}	
 	render() {
-		<li key={event.key} className="event-listItem">
-			<h3>{event.event.location}</h3>
-			<h4>{event.event.date}</h4>
-			<h4>{event.event.time}</h4>
-			<p>{event.event.name}</p>
-		</li>
+		return (
+			<div>
+				<h2>Event</h2>
+			</div>
+		)
 	}
 }
 
@@ -79,7 +88,12 @@ class App extends React.Component {
 		this.state = {
 			user: null,
 			loggedIn: false,
-			events: []
+			events: [],
+			name: "",
+			location: "",
+			date: "",
+			time: "",
+			singleEvent: {}
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.login = this.login.bind(this);
@@ -109,8 +123,8 @@ class App extends React.Component {
 					<h1>Where My Ballers At?</h1>
 					{displayEvents()}
 					<Route exact path="/addNewEvent" render={ () => <NewEventForm handleSubmit={this.handleSubmit} userId={this.state.user.uid}/>} />
-					<Route exact path="/events" render={ () => <EventsDisplay eventList={this.state.events} user={this.state.user} />}/>
-					<Route exact path="/events/:event" render={ () => <Event eventInfo={this.state.events}/>} />
+					<Route exact path="/events" render={ () => <EventsDisplay displayEvent={this.displayEvent} eventList={this.state.events} user={this.state.user} />}/>
+					<Route path="/events/:event" component={Event} />
 				</main>	
 			</Router>
 		)
@@ -121,10 +135,8 @@ class App extends React.Component {
 				this.setState({
 					user,
 					loggedIn: true
-				})
+				}) 
 
-				const userId = user.userId
-				
 				eventListRef.on('value', (snapshot) => {
 					const events = snapshot.val();
 					const currentEvents = [];
