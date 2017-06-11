@@ -30,6 +30,7 @@ class EventsDisplay extends React.Component {
 		)
 	}
 	handleClick(path) {
+		// pushing to attendees list in the event page
 		const attendeeRef = firebase.database().ref(path);
 		attendeeRef.once('value', (snapshot) => {
 			let attendeesList = snapshot.val()
@@ -45,6 +46,14 @@ class EventsDisplay extends React.Component {
 				}
 			}
 		});
+		// push to users/user/events
+		const usersEventsListRef = firebase.database().ref(`/users/${this.state.user.uid}`)
+		usersEventsListRef.push({
+			name: this.state.user.displayName
+			// events: {
+				
+			// }
+		})
 	}
 }
 

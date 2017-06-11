@@ -5,19 +5,10 @@ import {
 	Link, 
 	Route
 } from 'react-router-dom';
+import firebase from './firebase.js'
 import NewEventForm from './newEventForm.js'
 import EventsDisplay from './eventDisplay.js'
 import Event from './event.js'
-
-var config = {
-	apiKey: "AIzaSyAIqYoctbM99MIr6El8zRHGwg-s6FCBFoM",
-	authDomain: "sports-meet-up.firebaseapp.com",
-	databaseURL: "https://sports-meet-up.firebaseio.com",
-	projectId: "sports-meet-up",
-	storageBucket: "sports-meet-up.appspot.com",
-	messagingSenderId: "297580513675"
-};
-firebase.initializeApp(config);
 
 const eventListRef = firebase.database().ref('/events');
 const userListRef = firebase.database().ref('/users');
@@ -31,14 +22,9 @@ class App extends React.Component {
 		this.state = {
 			user: null,
 			loggedIn: false,
-			events: [],
-			name: "",
-			location: "",
-			date: "",
-			time: "",
+			events: {},
 			singleEvent: {}
 		}
-		this.handleSubmit = this.handleSubmit.bind(this);
 		this.login = this.login.bind(this);
 		this.logout = this.logout.bind(this);
 	}
@@ -65,9 +51,8 @@ class App extends React.Component {
 				<main>
 					<h1>Where My Ballers At?</h1>
 					{displayEvents()}
-					<Route exact path="/addNewEvent" 
-						render={ () => <NewEventForm handleSubmit={this.handleSubmit} userId={this.state.user.uid} />} />
-					<Route exact path="/events" render={ () => <EventsDisplay displayEvent={this.displayEvent} eventList={this.state.events} user={this.state.user} />} />
+					<Route exact path="/addNewEvent" component={NewEventForm} />
+					<Route exact path="/events/" component={EventsDisplay} />
 					<Route path="/events/:event" component={Event} />
 				</main>	
 			</Router>
@@ -110,7 +95,8 @@ class App extends React.Component {
 					user,
 					loggedIn: true
 				});
-				userListRef.push(
+
+				firebase.database().ref(`users/`).push(
 					uniqueUserId: {
 						events: {}
 					});
@@ -124,9 +110,6 @@ class App extends React.Component {
 					loggedIn: false
 				})
 			});
-	}
-	handleSubmit(formData) {
-		eventListRef.push(formData);
 	}
 }
 

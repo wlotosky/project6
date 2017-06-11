@@ -12,8 +12,8 @@ class Event extends React.Component {
 		}
 	}
 	componentWillMount() {
-		const singleEventRef = firebase.database().ref(`events/${this.props.match.params.event}`);
 		const event = this.props.match.params.event;
+		const singleEventRef = firebase.database().ref(`events/${event}`);
 
 		singleEventRef.on('value',(snapshot) => {
 			const event = snapshot.val();

@@ -1,4 +1,7 @@
 import React from 'react';
+import firebase from './firebase.js';
+
+const eventListRef = firebase.database().ref('/events');
 
 class NewEventForm extends React.Component {
 	constructor(props) {
@@ -8,40 +11,27 @@ class NewEventForm extends React.Component {
 			location: '',
 			date: '',
 			time: '',
-			user: this.props.userId
+			user: null,
+			loggedIn: false
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
-	handleChange(event) {
-		this.setState({
-			[event.target.name]: event.target.value
-		})
-	}
-	handleSubmit(event) {
-		event.preventDefault();
-		this.props.handleSubmit({
-			name: this.state.name,
-			location: this.state.location,
-			date: this.state.date,
-			time: this.state.time,
-			attendees: {
-				[this.state.user]: this.state.name
-			}
-		});
-		this.setState({
-			name: '',
-			location: '',
-			date: '',
-			time: ''
-		})
+	componentWillMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true,
+					name: user.displayName
+				})
+			}	
+		})	
 	}
 	render() {
 		return (
 			<form onSubmit={this.handleSubmit}>
 				<h2>Add New Event</h2>
-				<label htmlFor="name">Name</label>
-				<input value={this.state.name} onChange={this.handleChange} name="name" type="text"/>
 
 				<label htmlFor="location">Location</label>
 				<input value={this.state.location} onChange={this.handleChange} name="location" type="text"/>
@@ -55,6 +45,30 @@ class NewEventForm extends React.Component {
 				<input type="submit" value="Submit"/>
 			</form>
 		)
+	}
+	handleChange(event) {
+		this.setState({
+			[event.target.name]: event.target.value
+		})
+	}
+	handleSubmit(event) {
+		event.preventDefault();
+		eventListRef.push({
+			name: this.state.name,
+			location: this.state.location,
+			date: this.state.date,
+			time: this.state.time,
+			attendees: {
+				[this.state.user.uid]: this.state.name
+			}
+
+		})
+		this.setState({
+			name: '',
+			location: '',
+			date: '',
+			time: ''
+		})
 	}
 }
 
