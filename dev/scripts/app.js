@@ -5,10 +5,12 @@ import {
 	Link, 
 	Route
 } from 'react-router-dom';
+import _ from 'underscore';
 import firebase from './firebase.js'
 import NewEventForm from './newEventForm.js'
 import EventsDisplay from './eventDisplay.js'
 import Event from './event.js'
+
 
 const eventListRef = firebase.database().ref('/events');
 const userListRef = firebase.database().ref('/users');
@@ -66,22 +68,30 @@ class App extends React.Component {
 				this.setState({
 					user,
 					loggedIn: true
-				});
-				userRef.once('value', (snapshot) => {
-					const userList = snapshot.val();
-					for (let key in userList) {
-						if (userList[key].id === this.state.user.uid) {
+				}, () => {
+					userListRef.once('value', (snapshot) => {
+						const userList = snapshot.val();
+						if (userList === null) {
+							userListRef.push({
+								id: user.uid,
+								name: user.displayName
+							});
+						} else {
+							const userIds = _.pluck(userList, 'id');
 
-						} 
-						// else if () {
+							if (userIds.includes(this.state.user.uid)) {
+								console.log('user has already signed in before')
+							} else {
+								userListRef.push({
+									id: user.uid,
+									name: user.displayName
+								});
+							}
+						}
 
-						// }
-					}
-				});
-				userRef.push({
-					id: user.uid,
-					name: user.displayName
-				});
+					});
+					
+				})
 			});
 	}
 	logout () {

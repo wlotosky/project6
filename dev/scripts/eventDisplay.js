@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import firebase from 'firebase';
+import _ from 'underscore';
 
 const eventListRef = firebase.database().ref('/events');
 
@@ -80,14 +81,23 @@ class EventsDisplay extends React.Component {
 		attendeeRef.once('value', (snapshot) => {
 			let attendeesList = snapshot.val()
 			console.log(attendeesList);
-			for (let key in attendeesList) {
-				var singleAttendee = attendeesList[key]
-				for (let key in singleAttendee) {
-					if (key === this.state.user.uid) {
-						alert(`You're already attending`);
-					} else if (key !== this.state.user.uid) {
-						attendeeRef.push({[this.state.user.uid]:this.state.user.displayName});
-					}
+			if (attendeesList === null) {
+				attendeeRef.push({
+					id: this.state.user.uid,
+					name: this.state.user.displayName
+				});
+			} else {
+				const attendeeIds = _.pluck(attendeesList, 'id') 
+
+				console.log(attendeeIds);
+
+				if (attendeeIds.includes(this.state.user.uid)) {
+					console.log(`You're already attending`);
+				} else {
+					attendeeRef.push({
+						id: this.state.user.uid,
+						name: this.state.user.displayName
+					});
 				}
 			}
 		});
