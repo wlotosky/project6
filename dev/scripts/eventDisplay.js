@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import _ from 'underscore';
 
 const eventListRef = firebase.database().ref('/events');
+const userListRef = firebase.database().ref('/users');
 
 class EventsDisplay extends React.Component {
 	constructor(props) {
@@ -37,7 +38,7 @@ class EventsDisplay extends React.Component {
 							<h4>{event.event.date}</h4>
 							<h4>{event.event.time}</h4>
 							<p>{event.event.name}</p>
-							<button onClick={ () => this.handleClick(`/events/${event.key}/attendees/`)}>I'm attending</button>
+							<button onClick={ () => this.handleClick(`/events/${event.key}/attendees/`, event)}>I'm attending</button>
 							<Link to={`/events/${event.key}`}>	
 								<button>Go to Event Page</button>
 							</Link>
@@ -75,7 +76,7 @@ class EventsDisplay extends React.Component {
 			}
 		})
 	}
-	handleClick(path) {
+	handleClick(path, event) {
 		// pushing to attendees list in the event page
 		const attendeeRef = firebase.database().ref(path);
 		attendeeRef.once('value', (snapshot) => {
@@ -102,13 +103,16 @@ class EventsDisplay extends React.Component {
 			}
 		});
 		// push to users/user/events
-		const usersEventsListRef = firebase.database().ref(`/users/${this.state.user.uid}`)
-		usersEventsListRef.push({
-			name: this.state.user.displayName
-			// events: {
-
-			// }
-		})
+		const usersRef = firebase.database().ref('/users');
+		userListRef.on('value', (snapshot) => {
+			const users = snapshot.val();
+			for (let key in users) {
+				if (users[key].id === this.state.user.uid) {
+					userEventsRef = firebase.database().ref(`/users/${key}/events/${event}`)
+					userEventsRef.push(event);
+				}
+			}
+		});
 	}
 }
 
