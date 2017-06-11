@@ -21,9 +21,13 @@ class Event extends React.Component {
 			const attendees = [];
 			console.log(attendeesList);
 			for (let key in attendeesList) {
+				console.log(key, attendeesList[key]);
 				let singleAttendee = attendeesList[key]
 				for (let key in singleAttendee) {
-						attendees.push({[key]:singleAttendee[key]});
+						attendees.push({
+							key: key,
+							attendee: singleAttendee[key]
+						});
 					}
 				}
 			this.setState({
@@ -44,7 +48,7 @@ class Event extends React.Component {
 				<p>{this.state.name}</p>
 				{this.state.attendees.map( (attendee) => {
 					return (
-						<p>{attendee}</p>
+						<p key={attendee.key}>{attendee.attendee}</p>
 					)
 				})}
 			</div>

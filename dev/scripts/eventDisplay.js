@@ -35,11 +35,13 @@ class EventsDisplay extends React.Component {
 			let attendeesList = snapshot.val()
 			console.log(attendeesList);
 			for (let key in attendeesList) {
-				console.log(attendeesList[key])
-				if ([key] !== this.state.user.uid) {
-					attendeeRef.push({[this.state.user.uid]:this.state.user.displayName});
-				} else {
-					console.log('your already going')
+				var singleAttendee = attendeesList[key]
+				for (let key in singleAttendee) {
+					if (key === this.state.user.uid) {
+						alert(`You're already attending`);
+					} else if (key !== this.state.user.uid) {
+						attendeeRef.push({[this.state.user.uid]:this.state.user.displayName});
+					}
 				}
 			}
 		});
