@@ -58,34 +58,6 @@ class App extends React.Component {
 			</Router>
 		)
 	}
-	componentDidMount() {
-		firebase.auth().onAuthStateChanged( (user) => {
-			if (user) {
-				this.setState({
-					user,
-					loggedIn: true
-				}) 
-				eventListRef.on('value', (snapshot) => {
-					const events = snapshot.val();
-					const currentEvents = [];
-					for(let key in events) {
-						currentEvents.push({
-							key: key,
-							event: events[key]
-						});
-					}
-					this.setState({
-						events: currentEvents
-					})
-				});	
-			} else {
-				this.setState({
-					user: null,
-					loggedIn: false
-				})
-			}
-		})
-	}
 	login () {
 		firebase.auth().signInWithPopup(provider)
 			.then( (result) => {
@@ -95,11 +67,21 @@ class App extends React.Component {
 					user,
 					loggedIn: true
 				});
+				userRef.once('value', (snapshot) => {
+					const userList = snapshot.val();
+					for (let key in userList) {
+						if (userList[key].id === this.state.user.uid) {
 
-				firebase.database().ref(`users/`).push(
-					uniqueUserId: {
-						events: {}
-					});
+						} 
+						// else if () {
+
+						// }
+					}
+				});
+				userRef.push({
+					id: user.uid,
+					name: user.displayName
+				});
 			});
 	}
 	logout () {

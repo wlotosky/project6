@@ -1,18 +1,35 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import firebase from 'firebase';
+
+const eventListRef = firebase.database().ref('/events');
 
 class EventsDisplay extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: this.props.user
+			user: {},
+			loggedIn: false,
+			name: '',
+			events: []
 		}
 		this.handleClick = this.handleClick.bind(this);
+	}
+	componentWillMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true,
+					name: user.displayName
+				})
+			}	
+		})	
 	}
 	render() {
 		return (
 			<ul className="event-list">
-				{this.props.eventList.map( (event) => {
+				{this.state.events.map( (event) => {
 					return (
 						<li key={event.key} className="event-listItem">
 							<h3>{event.event.location}</h3>
@@ -28,6 +45,34 @@ class EventsDisplay extends React.Component {
 				})}
 			</ul>
 		)
+	}
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true
+				}) 
+				eventListRef.on('value', (snapshot) => {
+					const events = snapshot.val();
+					const currentEvents = [];
+					for(let key in events) {
+						currentEvents.push({
+							key: key,
+							event: events[key]
+						});
+					}
+					this.setState({
+						events: currentEvents
+					})
+				});	
+			} else {
+				this.setState({
+					user: null,
+					loggedIn: false
+				})
+			}
+		})
 	}
 	handleClick(path) {
 		// pushing to attendees list in the event page
@@ -51,7 +96,7 @@ class EventsDisplay extends React.Component {
 		usersEventsListRef.push({
 			name: this.state.user.displayName
 			// events: {
-				
+
 			// }
 		})
 	}
