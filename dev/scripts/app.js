@@ -6,11 +6,11 @@ import {
 	Route
 } from 'react-router-dom';
 import _ from 'underscore';
-import firebase from './firebase.js'
-import NewEventForm from './newEventForm.js'
-import EventsDisplay from './eventDisplay.js'
-import Event from './event.js'
-
+import firebase from './firebase.js';
+import NewEventForm from './newEventForm.js';
+import EventsDisplay from './eventDisplay.js';
+import Event from './event.js';
+import UserPage from './userPage.js';
 
 const eventListRef = firebase.database().ref('/events');
 const userListRef = firebase.database().ref('/users');
@@ -31,14 +31,25 @@ class App extends React.Component {
 		this.logout = this.logout.bind(this);
 	}
 	render() {
-		const displayEvents = () => {
+		const displayHomeNav = () => {
 			if (this.state.loggedIn === true) {
 				return (
-					<main>
-						<button onClick={this.logout}>Log Out</button>
-						<Link to="/events">Go to Events</Link>
-						<Link to="/addNewEvent">Go to Add New Event Page</Link> 
-					</main>	
+					<nav>
+						<ul>
+							<li>
+								<Link to="/events">Go to Events</Link>
+							</li>
+							<li>
+								<Link to="/addNewEvent">Go to Add New Event Page</Link>
+							</li>
+							<li>
+								<Link to="/:userId">Go to Your Profile Page</Link>
+							</li>
+							<li>
+								<button onClick={this.logout}>Log Out</button>
+							</li>
+						</ul>
+					</nav>
 				)
 			} else {
 				return (
@@ -52,10 +63,11 @@ class App extends React.Component {
 			<Router>
 				<main>
 					<h1>Where My Ballers At?</h1>
-					{displayEvents()}
+					{displayHomeNav()}
 					<Route exact path="/addNewEvent" component={NewEventForm} />
 					<Route exact path="/events/" component={EventsDisplay} />
 					<Route path="/events/:event" component={Event} />
+					<Route path="/:userId" component={UserPage} />
 				</main>	
 			</Router>
 		)

@@ -103,12 +103,12 @@ class EventsDisplay extends React.Component {
 			}
 		});
 		// push to users/user/events
-		const usersRef = firebase.database().ref('/users');
-		userListRef.on('value', (snapshot) => {
+		userListRef.once('value', (snapshot) => {
 			const users = snapshot.val();
 			for (let key in users) {
+				console.log(key, users[key], event)
 				if (users[key].id === this.state.user.uid) {
-					userEventsRef = firebase.database().ref(`/users/${key}/events/${event}`)
+					const userEventsRef = firebase.database().ref(`/users/${key}/events/`)
 					userEventsRef.push(event);
 				}
 			}
