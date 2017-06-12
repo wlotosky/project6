@@ -43,7 +43,7 @@ class App extends React.Component {
 								<Link to="/addNewEvent">Go to Add New Event Page</Link>
 							</li>
 							<li>
-								<Link to="/:userId">Go to Your Profile Page</Link>
+								<Link to={`/${this.state.user.uid}`}>Go to Your Profile Page</Link>
 							</li>
 							<li>
 								<button onClick={this.logout}>Log Out</button>
@@ -100,9 +100,7 @@ class App extends React.Component {
 								});
 							}
 						}
-
 					});
-					
 				})
 			});
 	}

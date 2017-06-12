@@ -41,14 +41,17 @@ class Event extends React.Component {
 		return (
 			<div>
 				<h3>{this.state.location}</h3>
+				<p>Created by: {this.state.name}</p>
 				<h4>{this.state.date}</h4>
 				<h4>{this.state.time}</h4>
-				<p>{this.state.name}</p>
-				{this.state.attendees.map( (attendee) => {
-					return (
-						<p key={attendee.key}>{attendee.name}</p>
-					)
-				})}
+				<h3>Attendees:</h3>
+				<ul>
+					{this.state.attendees.map( (attendee) => {
+						return (
+							<li key={attendee.key}>{attendee.name}</li>
+						)
+					})}
+				</ul>
 			</div>
 		)
 	}

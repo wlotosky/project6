@@ -25,8 +25,8 @@ class EventsDisplay extends React.Component {
 					loggedIn: true,
 					name: user.displayName
 				})
-			}	
-		})	
+			}
+		})
 	}
 	render() {
 		return (
@@ -42,7 +42,7 @@ class EventsDisplay extends React.Component {
 							<Link to={`/events/${event.key}`}>	
 								<button>Go to Event Page</button>
 							</Link>
-						</li>	
+						</li>
 					)
 				})}
 			</ul>
