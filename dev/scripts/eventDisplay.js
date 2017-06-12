@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import firebase from 'firebase';
 import _ from 'underscore';
+import GoogleMap from './googleMap.js';
 
 const eventListRef = firebase.database().ref('/events');
 const userListRef = firebase.database().ref('/users');
@@ -17,7 +18,7 @@ class EventsDisplay extends React.Component {
 		}
 		this.handleClick = this.handleClick.bind(this);
 	}
-	componentWillMount() {
+	componentDidMount() {
 		firebase.auth().onAuthStateChanged( (user) => {
 			if (user) {
 				this.setState({

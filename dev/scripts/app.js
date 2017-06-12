@@ -30,11 +30,21 @@ class App extends React.Component {
 		this.login = this.login.bind(this);
 		this.logout = this.logout.bind(this);
 	}
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true
+				})
+			}
+		})
+	}
 	render() {
 		const displayHomeNav = () => {
 			if (this.state.loggedIn === true) {
 				return (
-					<nav>
+					<nav className="mainNav">
 						<ul>
 							<li>
 								<Link to="/events">Go to Events</Link>
@@ -43,7 +53,7 @@ class App extends React.Component {
 								<Link to="/addNewEvent">Go to Add New Event Page</Link>
 							</li>
 							<li>
-								<Link to={`/${this.state.user.uid}`}>Go to Your Profile Page</Link>
+								<Link to={`/user/${this.state.user.uid}`}>Go to Your Profile Page</Link>
 							</li>
 							<li>
 								<button onClick={this.logout}>Log Out</button>
@@ -54,7 +64,7 @@ class App extends React.Component {
 			} else {
 				return (
 					<main>
-						<button onClick={this.login}>Login</button>
+						<button onClick={this.login} clasName="signIn-button">Login with Google</button>
 					</main>
 				)
 			}	
@@ -62,12 +72,12 @@ class App extends React.Component {
 		return (
 			<Router>
 				<main>
-					<h1>Where My Ballers At?</h1>
+					<h1 className="mainHeader">Where My Ballers At?</h1>
 					{displayHomeNav()}
-					<Route exact path="/addNewEvent" component={NewEventForm} />
+					<Route path="/addNewEvent/" component={NewEventForm} />
 					<Route exact path="/events/" component={EventsDisplay} />
 					<Route path="/events/:event" component={Event} />
-					<Route path="/:userId" component={UserPage} />
+					<Route path="/user/:userId" component={UserPage} />
 				</main>	
 			</Router>
 		)

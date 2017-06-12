@@ -9,10 +9,19 @@ class Event extends React.Component {
 			location: '',
 			date: '',
 			time: '',
-			attendees: []
+			attendees: [],
+			user: {}
 		}
 	}
-	componentWillMount() {
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true
+				}) 
+			}
+		})
 		const event = this.props.match.params.event;
 		const singleEventRef = firebase.database().ref(`events/${event}`);
 

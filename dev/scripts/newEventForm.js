@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from './firebase.js';
+import GoogleMap from './googleMap.js';
 
 const eventListRef = firebase.database().ref('/events');
 
@@ -11,13 +12,11 @@ class NewEventForm extends React.Component {
 			location: '',
 			date: '',
 			time: '',
-			user: null,
-			loggedIn: false
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
-	componentWillMount() {
+	componentDidMount() {
 		firebase.auth().onAuthStateChanged( (user) => {
 			if (user) {
 				this.setState({
@@ -25,7 +24,12 @@ class NewEventForm extends React.Component {
 					loggedIn: true,
 					name: user.displayName
 				})
-			}	
+			} else {
+				this.setState({
+					user: null,
+					loggedIn: false
+				})
+			}
 		})	
 	}
 	render() {
@@ -35,6 +39,7 @@ class NewEventForm extends React.Component {
 
 				<label htmlFor="location">Location</label>
 				<input value={this.state.location} onChange={this.handleChange} name="location" type="text"/>
+				<GoogleMap />
 
 				<label htmlFor="date">Date</label>
 				<input value={this.state.date} onChange={this.handleChange} name="date"type="date"/>

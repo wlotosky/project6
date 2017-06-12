@@ -8,23 +8,31 @@ class UserPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			loggedIn: false,
 			userId: '',
-			user: {},
+			user: null,
 			userEvents: [],
 		}
 	}
-	componentWillMount() {
-		this.setState({
-			userId: this.props.match.params.userId
-		})
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged( (user) => {
+			if (user) {
+				this.setState({
+					user,
+					loggedIn: true
+				}) 
+			}
+		})	
 		const userEventsRef = firebase.database().ref('/users');
 
 		userEventsRef.once('value', (snapshot) => {
 			const users = snapshot.val();
 			const userEventList = [];
+			console.log(users);
 
 			for (let key in users) {
-				if (users[key].id === this.state.userId) {
+				console.log(users, key, users[key])
+				if (users[key].id === this.state.user.uid) {
 					const events = users[key].events
 					for (let key in events) {
 						userEventList.push(events[key])
@@ -48,7 +56,7 @@ class UserPage extends React.Component {
 							<h4>{event.event.time}</h4>
 							<p>{event.event.name}</p>
 							<Link to={`/events/${event.key}`}>	
-								<button>Go to Event Page</button>
+								<button>View Event Page</button>
 							</Link>
 						</li>
 					)
