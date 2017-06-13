@@ -46,7 +46,7 @@ class UserPage extends React.Component {
 	}
 	render() {
 		return (
-			<ul className="event-list">
+			<ul className="event-list" className="componentSection">
 				{this.state.userEvents.map( (event) => {
 					console.log(event)
 					return (

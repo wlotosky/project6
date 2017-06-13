@@ -34,7 +34,7 @@ class NewEventForm extends React.Component {
 	}
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
+			<form onSubmit={this.handleSubmit} className="componentSection">
 				<h2>Add New Event</h2>
 
 				<label htmlFor="location">Location</label>
@@ -45,7 +45,7 @@ class NewEventForm extends React.Component {
 				<input value={this.state.date} onChange={this.handleChange} name="date"type="date"/>
 
 				<label htmlFor="time">Time</label>
-				<input value={this.state.time} onChange={this.handleChange} name="time"type="text"/>
+				<input value={this.state.time} onChange={this.handleChange} name="time"type="time"/>
 
 				<input type="submit" value="Submit"/>
 			</form>

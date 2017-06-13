@@ -48,7 +48,7 @@ class Event extends React.Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="componentSection">
 				<h3>{this.state.location}</h3>
 				<p>Created by: {this.state.name}</p>
 				<h4>{this.state.date}</h4>

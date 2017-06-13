@@ -1,6 +1,8 @@
 import React from 'React';
 import GoogleMapReact from 'google-map-react';
 
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
 class GoogleMap extends React.Component {
 	constructor(props) {
 		super(props);
@@ -14,11 +16,16 @@ class GoogleMap extends React.Component {
 	render() {
 		return (
 			<div>
-				<GoogleMapReact defaultCenter={`{lat:${this.state.lat}, lng:${this.state.long}`} defaultZoom={this.state.zoom} >
+				<GoogleMapReact 
+					defaultCenter={this.state.center} 
+					defaultZoom={this.state.zoom} >
+
+					<AnyReactComponent/>
+
 				</GoogleMapReact>
 			</div>
 		)
 	}
 }
 
-export default GoogleMap 
+export default GoogleMap
