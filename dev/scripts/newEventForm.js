@@ -35,17 +35,16 @@ class NewEventForm extends React.Component {
 	render() {
 		return (
 			<form onSubmit={this.handleSubmit} className="componentSection">
-				<h2>Add New Event</h2>
+				<h2 className="sectionHeader">Add New Event</h2>
 
 				<label htmlFor="location">Location</label>
 				<input value={this.state.location} onChange={this.handleChange} name="location" type="text"/>
-				<GoogleMap />
 
 				<label htmlFor="date">Date</label>
-				<input value={this.state.date} onChange={this.handleChange} name="date"type="date"/>
+				<input value={this.state.date} onChange={this.handleChange} name="date" type="date"/>
 
 				<label htmlFor="time">Time</label>
-				<input value={this.state.time} onChange={this.handleChange} name="time"type="time"/>
+				<input value={this.state.time} onChange={this.handleChange} name="time" type="time"/>
 
 				<input type="submit" value="Submit"/>
 			</form>
@@ -63,13 +62,8 @@ class NewEventForm extends React.Component {
 			location: this.state.location,
 			date: this.state.date,
 			time: this.state.time,
-			attendees: {
-				[this.state.user.uid]: this.state.name
-			}
-
 		})
 		this.setState({
-			name: '',
 			location: '',
 			date: '',
 			time: ''

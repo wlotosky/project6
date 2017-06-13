@@ -2,34 +2,46 @@
 @import 'partials/variables';
 
 body {
-	font-family: 'Playfair Display', serif;
+	font-family: 'Raleway', sans-serif;
 }
 
 ul {
 	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 a {
 	text-decoration: none;
 }
 
-h1, h2, h3, h4, h5 , h6 {
-	font-family: 'Montserrat', sans-serif;
-	color: lighten($red, 15%);
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 800;
+	color: white;
+	text-transform: uppercase;
+}
+
+p {
+	font-weight: 400;
+	color: white;
 }
 
 button, input[type="submit"] {
-	background-color: $red;
-	border: 1px solid white;
-	border-radius: 4px;
+	background-color: $mainColour;
 	color: white;
 	padding: 6px 18px;
-
 }
 
-.componentSection {
-	margin-top: 100px;
+section button {
+	border: 1px solid $mainColour;
 }
+
+section {
+	max-width: 940px;
+	margin: 0 auto;
+}
+
+// NAVIGATION
 
 .mainNav {
 	position: absolute;
@@ -40,34 +52,152 @@ button, input[type="submit"] {
 	box-shadow: 1px 1px 5px black;
 	display: flex;
 	justify-content: space-between;
-	.mainHeader {
-		display: inline-block;
-		margin-left: 10px;
-		font-weight: 700;
-		font-size: 26px;
+	align-items: center;
+	.logoBox {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 10px;
+		i {
+			font-size: 45px;
+			color: white;
+			
+		}
 	}
 	ul {
 		display: inline-block;
 	}
-	li {
+	li, button {
 		display: inline-block;
 		margin: 5px 10px;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 14px;
 		a {
 			color: white;
 		}
+	}
+	button {
+		border: 1px solid white;
+		border-radius: 4px;
+	}
+}
+
+// HERO IMAGE
+
+.heroImage {
+	height: 100vh;
+	background-image: url(../../assets/the-5th-141681.jpg);
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	z-index: -1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(40,40,40, 0.9);
+		z-index: 0;
+	}
+	& * {
+		position: relative;
+		z-index: 1;
+	}
+	h1 {
+		font-size: 60px;
+		margin-bottom: 0;
+		letter-spacing: 8px;
+	}
+	p {
+		letter-spacing: 3px;
+		font-size: 22px;
+	}
+}
+
+.componentSection, section {
+	margin-top: 130px;
+	margin-bottom: 100px; 
+}
+
+.sectionHeader {
+	color: $grey;
+	font-size: 28px;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	margin-bottom: 60px;
+	text-align: center;
+	position: relative;
+	&:after {
+		content: '';
+		width: 10%;
+		height: 3px;
+		background-color: $grey;
+		position: absolute;
+		bottom: -10px;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 }
 
 .event-list {
 	display: flex;
 	flex-wrap: wrap;
-	li.event-listItem {
-		width: calc(33%; - (50px / 3));
-		margin-right: 25px;
-		border: 1px solid $mainColour;
-		border-radius: 4px;
-	}
-	li.event-listItem:nth-of-type(3n) {
-		margin-right: none;
+	justify-content:space-between;
+	.event-listItem {
+		width: calc(33% - (100px / 3));
+		padding: 30px;
+		margin-bottom: 50px;
+		box-shadow: 1px 1px 5px $grey;
+		position: relative;
+		padding-bottom: 90px;
+		h3 {
+			font-weight: 800;
+			font-size: 20px;
+			letter-spacing: 1px;
+			margin: 0;
+			color: $grey;
+			letter-spacing: 2px;
+		}
+		h4 {
+			font-weight: 400;
+			font-size: 16px;
+			margin: 5px 0;
+			color: lighten($grey, 50%);
+			letter-spacing: 1px;
+		}
+		.attend-button {
+			background-color: $mainColour;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			font-size: 16px;
+			margin-top: 30px;
+		}
+		.listItem-bottom {
+			background-color: $grey;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			p {
+				color: white;
+				margin: 0 0 0 15px;
+				letter-spacing: 2px;
+			}
+			button {
+				background-color: $grey;
+				border: none;
+				font-size: 40px;
+			}
+		}
 	}
 }

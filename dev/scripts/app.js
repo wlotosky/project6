@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
 	BrowserRouter as Router,
-	Link, 
+	NavLink as Link, 
 	Route
 } from 'react-router-dom';
 import _ from 'underscore';
 import firebase from './firebase.js';
+import HeroImage from './heroImage.js';
 import NewEventForm from './newEventForm.js';
 import EventsDisplay from './eventDisplay.js';
 import Event from './event.js';
@@ -44,23 +45,29 @@ class App extends React.Component {
 		const displayHomeNav = () => {
 			if (this.state.loggedIn === true) {
 				return (
-					<nav className="mainNav">
-						<h2 className="mainHeader">Where My Ballers At?</h2>
-						<ul>
-							<li>
-								<Link to="/events">Events</Link>
-							</li>
-							<li>
-								<Link to="/addNewEvent">Add New Event</Link>
-							</li>
-							<li>
-								<Link to={`/user/${this.state.user.uid}`}>Profile</Link>
-							</li>
-							<li>
-								<button onClick={this.logout}>Log Out</button>
-							</li>
-						</ul>
-					</nav>
+					<div>	
+						<nav className="mainNav">
+							<div className="logoBox">
+								<Link to="/" activeClassName="activeLink">
+									<i className="fa fa-dribbble" aria-hidden="true"></i>
+								</Link>	
+							</div>
+							<ul>
+								<li>
+									<Link to="/addNewEvent" activeClassName="activeLink">Add New Event</Link>
+								</li>
+								<li>
+									<Link to="/events" activeClassName="activeLink">Events</Link>
+								</li>
+								<li>
+									<Link to={`/user/${this.state.user.uid}`} activeClassName="activeLink" >Profile</Link>
+								</li>
+								<li>
+									<button onClick={this.logout}>Log Out</button>
+								</li>
+							</ul>
+						</nav>
+					</div>
 				)
 			} else {
 				return (
@@ -69,15 +76,16 @@ class App extends React.Component {
 						<button onClick={this.login} className="signIn-button">Login with Google</button>
 					</main>
 				)
-			}	
+			}
 		}
 		return (
 			<Router>
 				<main>
 					{displayHomeNav()}
+					<Route exact path="/" component={HeroImage} />
 					<Route path="/addNewEvent/" component={NewEventForm} />
 					<Route exact path="/events/" component={EventsDisplay} />
-					<Route path="/events/:event" component={Event} />
+					<Route exact path="/events/:event" component={Event} />
 					<Route path="/user/:userId" component={UserPage} />
 				</main>	
 			</Router>
