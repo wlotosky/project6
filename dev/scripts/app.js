@@ -67,9 +67,6 @@ class App extends React.Component {
 								</li>
 							</ul>
 						</nav>
-						<footer>
-							<p>Created by William Lotosky</p>
-						</footer>
 					</main>
 				)
 			} else {
@@ -88,9 +85,6 @@ class App extends React.Component {
 								</li>
 							</ul>
 						</nav>
-						<footer>
-							<p>Created by William Lotosky</p>
-						</footer>
 					</main>
 				)
 			}
