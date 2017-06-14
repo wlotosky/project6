@@ -1,6 +1,10 @@
 @import 'partials/setup';
 @import 'partials/variables';
 
+* {
+	transition: all 0.5s;
+}
+
 body {
 	font-family: 'Raleway', sans-serif;
 }
@@ -39,6 +43,34 @@ section button {
 section {
 	max-width: 940px;
 	margin: 0 auto;
+	@media (max-width: 940px) {
+		max-width: 768px;
+	}
+}
+
+.componentSection, section {
+	margin-top: 130px;
+	margin-bottom: 100px; 
+}
+
+.sectionHeader {
+	color: $grey;
+	font-size: 28px;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	margin-bottom: 60px;
+	text-align: center;
+	position: relative;
+	&:after {
+		content: '';
+		width: 80px;
+		height: 3px;
+		background-color: $grey;
+		position: absolute;
+		bottom: -10px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 }
 
 // NAVIGATION
@@ -61,7 +93,6 @@ section {
 		i {
 			font-size: 45px;
 			color: white;
-			
 		}
 	}
 	ul {
@@ -73,6 +104,17 @@ section {
 		text-transform: uppercase;
 		letter-spacing: 2px;
 		font-size: 14px;
+		&:hover {
+			&:after {
+				content: '';
+				width: 80px;
+				height: 5px;
+				background-color: white;
+				position: absolute;
+				top: -10px;
+				left: 0;
+			}
+		}
 		a {
 			color: white;
 		}
@@ -83,10 +125,23 @@ section {
 	}
 }
 
+.activeLink {
+	position: relative;
+	&:after {
+		content: '';
+		width: 50px;
+		height: 5px;
+		background-color: white;
+		position: absolute;
+		bottom: -10px;
+		left: 0;
+	}
+}
+
 // HERO IMAGE
 
 .heroImage {
-	height: 100vh;
+	height: calc(100vh - 52px);
 	background-image: url(../../assets/the-5th-141681.jpg);
 	background-size: cover;
 	background-position: center;
@@ -114,89 +169,170 @@ section {
 		font-size: 60px;
 		margin-bottom: 0;
 		letter-spacing: 8px;
+		text-align: center;
+		@media(max-width: 940px) {
+			font-size: 40px;
+			letter-spacing: 6px;
+		}
+		@media(max-width: 768px) {
+			font-size: 30px;
+			letter-spacing: 3px;
+		}
 	}
 	p {
 		letter-spacing: 3px;
 		font-size: 22px;
+		@media(max-width: 768px) {
+			font-size: 16px;
+			letter-spacing: 2px;
+		}
 	}
 }
 
-.componentSection, section {
-	margin-top: 130px;
-	margin-bottom: 100px; 
-}
-
-.sectionHeader {
-	color: $grey;
-	font-size: 28px;
-	text-transform: uppercase;
-	letter-spacing: 4px;
-	margin-bottom: 60px;
-	text-align: center;
-	position: relative;
-	&:after {
-		content: '';
-		width: 10%;
-		height: 3px;
-		background-color: $grey;
-		position: absolute;
-		bottom: -10px;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-}
+// EVENTS
 
 .event-list {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content:space-between;
-	.event-listItem {
-		width: calc(33% - (100px / 3));
-		padding: 30px;
-		margin-bottom: 50px;
-		box-shadow: 1px 1px 5px $grey;
-		position: relative;
-		padding-bottom: 90px;
-		h3 {
-			font-weight: 800;
-			font-size: 20px;
-			letter-spacing: 1px;
-			margin: 0;
-			color: $grey;
+	@media (max-width: 768px) {
+		justify-content: center;
+	}
+}
+
+.wrapper{
+	margin-top: 80px;
+}
+
+.singleEvent {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 1px 1px 5px $grey;
+	width: 70%;
+	margin: 0 auto;
+	padding: 50px;
+	h3 {
+		font-weight: 800;
+		font-size: 40px;
+		letter-spacing: 1px;
+		margin: 0;
+		color: $grey;
+		letter-spacing: 4px;
+	}
+	h4 {
+		font-weight: 400;
+		font-size: 32px;
+		margin: 10px 0;
+		color: lighten($grey, 50%);
+		letter-spacing: 2px;
+	}
+	p, li {
+		font-size: 32px;
+		color: $grey;
+	}
+}
+
+.event-listItem {
+	width: calc(33% - (100px / 3));
+	padding: 30px;
+	margin-bottom: 50px;
+	box-shadow: 1px 1px 5px $grey;
+	position: relative;
+	padding-bottom: 90px;
+	display: flex;
+	flex-direction: column;
+	@media (max-width: 940px) {
+		width: calc(50% - 20px);
+	}
+	@media (max-width: 768px) {
+		width: 80%;
+	}
+	h3 {
+		font-weight: 800;
+		font-size: 20px;
+		letter-spacing: 1px;
+		margin: 0;
+		color: $grey;
+		letter-spacing: 2px;
+	}
+	h4 {
+		font-weight: 400;
+		font-size: 16px;
+		margin: 5px 0;
+		color: lighten($grey, 50%);
+		letter-spacing: 1px;
+	}
+	.attend-button {
+		background-color: $mainColour;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-size: 16px;
+		margin-top: 30px;
+	}
+	.listItem-bottom {
+		background-color: $grey;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		p {
+			color: white;
+			margin: 0 0 0 15px;
 			letter-spacing: 2px;
 		}
-		h4 {
-			font-weight: 400;
-			font-size: 16px;
-			margin: 5px 0;
-			color: lighten($grey, 50%);
-			letter-spacing: 1px;
-		}
-		.attend-button {
-			background-color: $mainColour;
-			text-transform: uppercase;
-			letter-spacing: 2px;
-			font-size: 16px;
-			margin-top: 30px;
-		}
-		.listItem-bottom {
+		button {
 			background-color: $grey;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			position: absolute;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			p {
-				color: white;
-				margin: 0 0 0 15px;
-				letter-spacing: 2px;
-			}
-			button {
-				background-color: $grey;
-				border: none;
-				font-size: 40px;
+			border: none;
+			font-size: 40px;
+		}
+	}
+}
+
+// FORM
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	input[type="submit"] {
+		border: none;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		margin-top: 60px;
+		padding: 10px 20px;
+	}
+}
+
+.inputsHolder {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	width: 90%;
+	.inputHolder {
+		width: 28%;
+		@media (max-width: 768px) {
+			width: 100%;
+			margin-bottom: 20px;
+		}
+		label {
+			display: block;
+			text-transform: uppercase;
+		}
+		input {
+			width: 100%;
+			text-transform: uppercase;
+			border: 1px solid $grey;
+			padding: 10px;
+			color: lighten($grey, 50%);
+			margin-bottom: 5px;
+			&:focus {
+				outline: none;
 			}
 		}
 	}

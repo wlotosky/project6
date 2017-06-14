@@ -45,10 +45,10 @@ class App extends React.Component {
 		const displayHomeNav = () => {
 			if (this.state.loggedIn === true) {
 				return (
-					<div>	
+					<main>
 						<nav className="mainNav">
 							<div className="logoBox">
-								<Link to="/" activeClassName="activeLink">
+								<Link to="/" >
 									<i className="fa fa-dribbble" aria-hidden="true"></i>
 								</Link>	
 							</div>
@@ -67,13 +67,30 @@ class App extends React.Component {
 								</li>
 							</ul>
 						</nav>
-					</div>
+						<footer>
+							<p>Created by William Lotosky</p>
+						</footer>
+					</main>
 				)
 			} else {
 				return (
 					<main>
 						<h1 className="mainHeader">Where My Ballers At?</h1>
-						<button onClick={this.login} className="signIn-button">Login with Google</button>
+						<nav className="mainNav">
+							<div className="logoBox">
+								<Link to="/" >
+									<i className="fa fa-dribbble" aria-hidden="true"></i>
+								</Link>	
+							</div>
+							<ul>
+								<li>
+									<button onClick={this.login} className="signIn-button">Login</button>
+								</li>
+							</ul>
+						</nav>
+						<footer>
+							<p>Created by William Lotosky</p>
+						</footer>
 					</main>
 				)
 			}
@@ -91,7 +108,7 @@ class App extends React.Component {
 			</Router>
 		)
 	}
-	login () {
+	login() {
 		firebase.auth().signInWithPopup(provider)
 			.then( (result) => {
 				const user = result.user;
@@ -121,7 +138,7 @@ class App extends React.Component {
 						}
 					});
 				})
-			});
+			})
 	}
 	logout () {
 		auth.signOut()

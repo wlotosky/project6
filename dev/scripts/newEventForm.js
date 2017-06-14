@@ -37,16 +37,24 @@ class NewEventForm extends React.Component {
 			<form onSubmit={this.handleSubmit} className="componentSection">
 				<h2 className="sectionHeader">Add New Event</h2>
 
-				<label htmlFor="location">Location</label>
-				<input value={this.state.location} onChange={this.handleChange} name="location" type="text"/>
+				<div className="inputsHolder">
+					<div className="inputHolder">
+						<input value={this.state.location} onChange={this.handleChange} name="location" type="text" placeholder="Christie Pits" />
+						<label htmlFor="location">Location</label>
+					</div>
 
-				<label htmlFor="date">Date</label>
-				<input value={this.state.date} onChange={this.handleChange} name="date" type="date"/>
+					<div className="inputHolder">
+						<input value={this.state.date} onChange={this.handleChange} name="date" type="date"/>
+						<label htmlFor="date">Date</label>
+					</div>
 
-				<label htmlFor="time">Time</label>
-				<input value={this.state.time} onChange={this.handleChange} name="time" type="time"/>
+					<div className="inputHolder">
+						<input value={this.state.time} onChange={this.handleChange} name="time" type="time"/>
+						<label htmlFor="time">Time</label>
+					</div>
+				</div>
 
-				<input type="submit" value="Submit"/>
+				<input type="submit" value="Create Event"/>
 			</form>
 		)
 	}
