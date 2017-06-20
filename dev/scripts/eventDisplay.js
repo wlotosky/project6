@@ -104,7 +104,6 @@ class EventsDisplay extends React.Component {
 		const attendeeRef = firebase.database().ref(path);
 		attendeeRef.once('value', (snapshot) => {
 			let attendeesList = snapshot.val()
-			console.log(attendeesList);
 			if (attendeesList === null) {
 				attendeeRef.push({
 					id: this.state.user.uid,
@@ -113,10 +112,8 @@ class EventsDisplay extends React.Component {
 			} else {
 				const attendeeIds = _.pluck(attendeesList, 'id') 
 
-				console.log(attendeeIds);
-
 				if (attendeeIds.includes(this.state.user.uid)) {
-					console.log(`You're already attending`);
+
 				} else {
 					attendeeRef.push({
 						id: this.state.user.uid,

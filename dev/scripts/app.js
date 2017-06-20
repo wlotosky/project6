@@ -19,6 +19,14 @@ const userListRef = firebase.database().ref('/users');
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
+const Hamburger = ({ modalShow, modal }) => {
+	if (modal) {
+		return <a href="#" onClick={modalShow} className="hamburger">X</a>
+	} else {
+		return <a href="#" onClick={modalShow} className="hamburger">&#9777;</a>
+	}
+}
+
 class App extends React.Component {
 	constructor () {
 		super(); 
@@ -26,10 +34,12 @@ class App extends React.Component {
 			user: null,
 			loggedIn: false,
 			events: {},
-			singleEvent: {}
+			singleEvent: {},
+			modal: false
 		}
 		this.login = this.login.bind(this);
 		this.logout = this.logout.bind(this);
+		this.modalShow = this.modalShow.bind(this);
 	}
 	componentDidMount() {
 		firebase.auth().onAuthStateChanged( (user) => {
@@ -42,6 +52,7 @@ class App extends React.Component {
 		})
 	}
 	render() {
+		const modalClass = 'modal';
 		const displayHomeNav = () => {
 			if (this.state.loggedIn === true) {
 				return (
@@ -52,7 +63,8 @@ class App extends React.Component {
 									<i className="fa fa-dribbble" aria-hidden="true"></i>
 								</Link>	
 							</div>
-							<ul>
+
+							<ul className={this.state.modal ? modalClass : null}>
 								<li>
 									<Link to="/addNewEvent" activeClassName="activeLink">Add New Event</Link>
 								</li>
@@ -66,6 +78,7 @@ class App extends React.Component {
 									<button onClick={this.logout}>Log Out</button>
 								</li>
 							</ul>
+							<Hamburger className="hamburger" modalShow={this.modalShow} modal={this.state.modal}/>
 						</nav>
 					</main>
 				)
@@ -122,7 +135,7 @@ class App extends React.Component {
 							const userIds = _.pluck(userList, 'id');
 
 							if (userIds.includes(this.state.user.uid)) {
-								console.log('user has already signed in before')
+
 							} else {
 								userListRef.push({
 									id: user.uid,
@@ -142,6 +155,12 @@ class App extends React.Component {
 					loggedIn: false
 				})
 			});
+	}
+	modalShow() {
+		console.log('clicked');
+		this.setState({
+			modal: !this.state.modal
+		});
 	}
 }
 

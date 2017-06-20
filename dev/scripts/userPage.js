@@ -25,15 +25,13 @@ class UserPage extends React.Component {
 				userEventsRef.on('value', (snapshot) => {
 					const users = snapshot.val();
 					const userEventList = [];
-					console.log(users);
 
 					for (let key in users) {
-						console.log(key, users[key])
+
 						if (users[key].id === this.state.user.uid) {
 							const events = users[key].events
 							for (let key in events) {
 								userEventList.push(events[key]);
-								console.log(events[key]);
 							}
 							this.setState({
 								userEvents: userEventList
@@ -50,7 +48,6 @@ class UserPage extends React.Component {
 				<h2 className="sectionHeader">Your Events</h2>
 				<ul className="event-list" >
 					{this.state.userEvents.map( (event) => {
-						console.log(event)
 						return (
 							<li key={event.key} className="event-listItem">
 								<h3>{event.event.location}</h3>

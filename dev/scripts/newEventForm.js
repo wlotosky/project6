@@ -34,28 +34,30 @@ class NewEventForm extends React.Component {
 	}
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit} className="componentSection">
-				<h2 className="sectionHeader">Add New Event</h2>
+			<div>
+				<form onSubmit={this.handleSubmit} className="componentSection">
+					<h2 className="sectionHeader">Add New Event</h2>
 
-				<div className="inputsHolder">
-					<div className="inputHolder">
-						<input value={this.state.location} onChange={this.handleChange} name="location" type="text" placeholder="Christie Pits" />
-						<label htmlFor="location">Location</label>
+					<div className="inputsHolder">
+						<div className="inputHolder">
+							<input value={this.state.location} onChange={this.handleChange} name="location" type="text" placeholder="Christie Pits" />
+							<label htmlFor="location">Location</label>
+						</div>
+
+						<div className="inputHolder">
+							<input value={this.state.date} onChange={this.handleChange} name="date" type="date"/>
+							<label htmlFor="date">Date</label>
+						</div>
+
+						<div className="inputHolder">
+							<input value={this.state.time} onChange={this.handleChange} name="time" type="time"/>
+							<label htmlFor="time">Time</label>
+						</div>
 					</div>
 
-					<div className="inputHolder">
-						<input value={this.state.date} onChange={this.handleChange} name="date" type="date"/>
-						<label htmlFor="date">Date</label>
-					</div>
-
-					<div className="inputHolder">
-						<input value={this.state.time} onChange={this.handleChange} name="time" type="time"/>
-						<label htmlFor="time">Time</label>
-					</div>
-				</div>
-
-				<input type="submit" value="Create Event"/>
-			</form>
+					<input type="submit" value="Create Event"/>
+				</form>
+			</div>
 		)
 	}
 	handleChange(event) {

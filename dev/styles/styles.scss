@@ -50,7 +50,9 @@ section {
 
 .componentSection, section {
 	margin-top: 130px;
-	margin-bottom: 100px; 
+	@media(max-width: 480px) {
+		margin-top: 150px;
+	}
 }
 
 .sectionHeader {
@@ -75,11 +77,16 @@ section {
 
 // NAVIGATION
 
+.mainHeader {
+	margin: 0;
+}
+
 .mainNav {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
+	padding: 8px 0;
 	background-color: $mainColour;
 	box-shadow: 1px 1px 5px black;
 	display: flex;
@@ -96,14 +103,42 @@ section {
 		}
 	}
 	ul {
-		display: inline-block;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		@media (max-width: 768px) {
+			display: none;
+		}
+	}
+	.modal {
+		position: relative;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: $mainColour;
+		height: 100vh;
+		flex-direction: column;
+		@media (max-width: 768px) {
+			display: block;
+		}
+		li {
+			font-size: 30px;
+			width: 100%;
+			margin: 20px 0;
+		}
 	}
 	li, button {
 		display: inline-block;
-		margin: 5px 10px;
+		margin: 5px 15px;
 		text-transform: uppercase;
 		letter-spacing: 2px;
 		font-size: 14px;
+		@media(max-width: 768px) {
+			width: calc(50% - 30px);
+			text-align: right;
+		}	
 		&:hover {
 			&:after {
 				content: '';
@@ -122,6 +157,25 @@ section {
 	button {
 		border: 1px solid white;
 		border-radius: 4px;
+		padding: 8px 20px;
+		@media(max-width: 768px) {
+			width: 70%;
+			text-align: center;
+			margin-right: 0;
+		}
+	}
+	.hamburger {
+			position: absolute;
+			display: none;
+			color: white;
+			font-size: 30px;
+			margin-right: 20px;
+			bottom: 0;
+			right: 0;
+			margin-bottom: 20px;
+		@media(max-width: 768px) {
+			display: block;
+		}
 	}
 }
 
@@ -142,7 +196,7 @@ section {
 
 .heroImage {
 	height: 100vh;
-	background-image: url(../../assets/the-5th-141681.jpg);
+	background-image: url(../../assets/bballer-pasty.jpg);
 	background-size: cover;
 	background-position: center;
 	position: relative;
@@ -212,7 +266,7 @@ section {
 	align-items: space-between;
 	box-shadow: 1px 1px 5px $grey;
 	width: 70%;
-	margin: 0 auto;
+	margin: 125px auto;
 	padding: 50px;
 	@media (max-width: 768px) {
 		width: 90%;
@@ -364,14 +418,16 @@ form {
 }
 
 footer {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	// position: absolute;
+	// bottom: 0;
+	// left: 0;
+	// right: 0;
+	padding: 10px 0;
 	background-color: $mainColour;
 	box-shadow: 1px 1px 5px black;
 	p {
 		color: white;
 		text-align: center;
+
 	}
 }

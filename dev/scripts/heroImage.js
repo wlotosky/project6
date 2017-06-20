@@ -6,9 +6,14 @@ class HeroImage extends React.Component {
 	}
 	render() {
 		return (
-			<div className="heroImage">
-				<h1 className="mainHeader">Where My Ballers At?</h1>
-				<p>Organize basketball with your friends</p>
+			<div>
+				<div className="heroImage">
+					<h1 className="mainHeader">Where My Ballers At?</h1>
+					<p>Organize basketball with your friends</p>
+				</div>
+				<footer>
+					<p>Created by William Lotosky &copy; 2017</p>
+				</footer>
 			</div>
 		)
 	}

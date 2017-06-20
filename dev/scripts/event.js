@@ -60,20 +60,22 @@ class Event extends React.Component {
 	}
 	render() {
 		return (
-			<div className="wrapper">
-				<div className="componentSection singleEvent">
-					<h3>{this.state.location}</h3>
-					<p className="creator">Created by: {this.state.name}</p>
-					<h4>{`${this.state.date.month} ${this.state.date.day}, ${this.state.date.year}`}</h4>
-					<h4>{this.state.time}</h4>
-					<h3>Attendees:</h3>
-					<ul>
-						{this.state.attendees.map( (attendee) => {
-							return (
-								<li key={attendee.key}>{attendee.name}</li>
-							)
-						})}
-					</ul>
+			<div>
+				<div className="wrapper">
+					<div className="componentSection singleEvent">
+						<h3>{this.state.location}</h3>
+						<p className="creator">Created by: {this.state.name}</p>
+						<h4>{`${this.state.date.month} ${this.state.date.day}, ${this.state.date.year}`}</h4>
+						<h4>{this.state.time}</h4>
+						<h3>Attendees:</h3>
+						<ul>
+							{this.state.attendees.map( (attendee) => {
+								return (
+									<li key={attendee.key}>{attendee.name}</li>
+								)
+							})}
+						</ul>
+					</div>
 				</div>
 			</div>
 		)
