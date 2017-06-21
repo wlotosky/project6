@@ -82,7 +82,6 @@ section {
 }
 
 .mainNav {
-	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -112,7 +111,7 @@ section {
 		}
 	}
 	.modal {
-		position: relative;
+		position: absolute;
 		top: 0;
 		bottom: 0;
 		left: 0;
@@ -120,13 +119,22 @@ section {
 		background-color: $mainColour;
 		height: 100vh;
 		flex-direction: column;
+		z-index: 1;
+		padding-top: 30%;
 		@media (max-width: 768px) {
 			display: block;
 		}
+		.hamburger + .modal {
+			bottom: 0;
+		}
 		li {
-			font-size: 30px;
+			font-size: 25px;
 			width: 100%;
 			margin: 20px 0;
+			text-align: center;
+		}
+		button {
+			width: 150px;
 		}
 	}
 	li, button {
@@ -170,9 +178,11 @@ section {
 			color: white;
 			font-size: 30px;
 			margin-right: 20px;
-			bottom: 0;
+			top: 20px;
 			right: 0;
 			margin-bottom: 20px;
+			z-index: 1;
+			background-color: $mainColour;
 		@media(max-width: 768px) {
 			display: block;
 		}
@@ -418,13 +428,10 @@ form {
 }
 
 footer {
-	// position: absolute;
-	// bottom: 0;
-	// left: 0;
-	// right: 0;
 	padding: 10px 0;
 	background-color: $mainColour;
 	box-shadow: 1px 1px 5px black;
+	margin-top: 100px;
 	p {
 		color: white;
 		text-align: center;

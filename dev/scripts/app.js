@@ -19,11 +19,11 @@ const userListRef = firebase.database().ref('/users');
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-const Hamburger = ({ modalShow, modal }) => {
+const Hamburger = ({ modalToggle, modal }) => {
 	if (modal) {
-		return <a href="#" onClick={modalShow} className="hamburger">X</a>
+		return <a href="#" onClick={modalToggle} className="hamburger">X</a>
 	} else {
-		return <a href="#" onClick={modalShow} className="hamburger">&#9777;</a>
+		return <a href="#" onClick={modalToggle} className="hamburger">&#9777;</a>
 	}
 }
 
@@ -39,7 +39,8 @@ class App extends React.Component {
 		}
 		this.login = this.login.bind(this);
 		this.logout = this.logout.bind(this);
-		this.modalShow = this.modalShow.bind(this);
+		this.modalToggle = this.modalToggle.bind(this);
+		this.modalRemove = this.modalRemove.bind(this);
 	}
 	componentDidMount() {
 		firebase.auth().onAuthStateChanged( (user) => {
@@ -65,20 +66,20 @@ class App extends React.Component {
 							</div>
 
 							<ul className={this.state.modal ? modalClass : null}>
-								<li>
-									<Link to="/addNewEvent" activeClassName="activeLink">Add New Event</Link>
+								<li onClick={this.modalRemove}>
+									<Link to="/addNewEvent" activeClassName="activeLink" >Add New Event</Link>
 								</li>
-								<li>
+								<li onClick={this.modalRemove}>
 									<Link to="/events" activeClassName="activeLink">Events</Link>
 								</li>
-								<li>
+								<li onClick={this.modalRemove}>
 									<Link to={`/user/${this.state.user.uid}`} activeClassName="activeLink" >Profile</Link>
 								</li>
-								<li>
+								<li onClick={this.modalRemove}>
 									<button onClick={this.logout}>Log Out</button>
 								</li>
 							</ul>
-							<Hamburger className="hamburger" modalShow={this.modalShow} modal={this.state.modal}/>
+							<Hamburger className="hamburger" modalToggle={this.modalToggle} modal={this.state.modal}/>
 						</nav>
 					</main>
 				)
@@ -111,6 +112,9 @@ class App extends React.Component {
 					<Route exact path="/events/" component={EventsDisplay} />
 					<Route exact path="/events/:event" component={Event} />
 					<Route path="/user/:userId" component={UserPage} />
+					<footer>
+						<p>Created by William Lotosky &copy; 2017</p>
+					</footer>
 				</main>	
 			</Router>
 		)
@@ -156,11 +160,15 @@ class App extends React.Component {
 				})
 			});
 	}
-	modalShow() {
-		console.log('clicked');
+	modalToggle() {
 		this.setState({
 			modal: !this.state.modal
 		});
+	}
+	modalRemove() {
+		this.setState({
+			modal: false
+		})
 	}
 }
 
