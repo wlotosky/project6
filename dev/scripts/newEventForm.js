@@ -11,7 +11,7 @@ class NewEventForm extends React.Component {
 			name: '',
 			location: '',
 			date: '',
-			time: '',
+			time: ''
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);

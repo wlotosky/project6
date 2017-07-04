@@ -57,7 +57,6 @@ class App extends React.Component {
 		const displayHomeNav = () => {
 			if (this.state.loggedIn === true) {
 				return (
-					<main>
 						<nav className="mainNav">
 							<div className="logoBox">
 								<Link to="/" >
@@ -81,25 +80,22 @@ class App extends React.Component {
 							</ul>
 							<Hamburger className="hamburger" modalToggle={this.modalToggle} modal={this.state.modal}/>
 						</nav>
-					</main>
 				)
 			} else {
 				return (
-					<main>
-						<h1 className="mainHeader">Where My Ballers At?</h1>
 						<nav className="mainNav">
 							<div className="logoBox">
 								<Link to="/" >
 									<i className="fa fa-dribbble" aria-hidden="true"></i>
 								</Link>	
 							</div>
-							<ul>
-								<li>
+							<ul className={this.state.modal ? modalClass : null} >
+								<li onClick={this.modalRemove}>
 									<button onClick={this.login} className="signIn-button">Login</button>
 								</li>
 							</ul>
+							<Hamburger className="hamburger" modalToggle={this.modalToggle} modal={this.state.modal}/>
 						</nav>
-					</main>
 				)
 			}
 		}

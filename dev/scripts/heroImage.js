@@ -1,19 +1,13 @@
 import React from 'react';
 
-class HeroImage extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
+const HeroImage = () => {
+
 		return (
-			<div>
 				<div className="heroImage">
 					<h1 className="mainHeader">Where My Ballers At?</h1>
 					<p>Organize basketball with your friends</p>
 				</div>
-			</div>
 		)
-	}
 }
 
 export default HeroImage

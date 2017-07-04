@@ -1,0 +1,94 @@
+```{
+  users: {
+    user1: {
+      name: 'Matt',
+      // events: {
+      //   weirdFirebaseId: 'eventId',
+      // },
+    },
+    user2: {
+      name: 'Vincent',
+      // events: {
+      //   weirdFirebaseId: 'eventId',
+      // },
+    }
+  },
+  events: {
+    event1: {
+      name: 'Baseball',
+      location: 'location name',
+      host: 'Matt' // got this from the user object
+      // attendees: {
+      //   weirdFirebaseId: 'Vincent',
+      //   weirdFirebaseId: 'Matt',
+      // }
+    },
+    event2: {
+      name: 'Basketball',
+      location: 'location name',
+      // attendees: {
+      //   weirdFirebaseId: 'Vincent',
+      //   weirdFirebaseId: 'Matt',
+      // }
+    }
+  }
+}```
+
+Matt Fairley
+[7:23 PM] 
+```import React from 'react';
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  // This function takes an object of data, and sends it to firebase
+  submitToFirebase(data) {
+    // Right now, data is an object that looks like { name: 'value' }
+    this.firebase.send(data);
+  }  
+
+  render() {
+    return (
+      <div>
+        <Form handleSubmit={this.submitToFirebase} />
+      </div>
+    );
+  }
+}
+
+import React from 'react';
+
+export default class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      location: '',
+    }
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.handleSubmit({
+      name: this.state.name,
+      location: this.state.location,
+    });
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+        <input type="text" location="location" value={this.state.location} onChange={this.handleChange} />
+      </form>
+    );
+  }
+}```

@@ -42,7 +42,7 @@ class EventsDisplay extends React.Component {
 						)
 					})}
 				</ul>
-			</section>	
+			</section>
 		)
 	}
 	componentDidMount() {
@@ -126,10 +126,17 @@ class EventsDisplay extends React.Component {
 		userListRef.once('value', (snapshot) => {
 			const users = snapshot.val();
 			for (let key in users) {
-				console.log(key, users[key], event)
 				if (users[key].id === this.state.user.uid) {
-					const userEventsRef = firebase.database().ref(`/users/${key}/events/`)
-					userEventsRef.push(event);
+
+					const userEventsRef = firebase.database().ref(`/users/${key}/events/`);
+					const userEvents = users[key].events; 
+					const eventKeys = _.pluck(userEvents, 'key');
+
+					if (eventKeys.includes(event.key)) {
+						
+					} else {
+						userEventsRef.push(event);
+					}
 				}
 			}
 		});
@@ -148,7 +155,6 @@ class EventsDisplay extends React.Component {
 				let dateArray = event.event.date.split('-', 3);
 				let dateString = dateArray.join('');
 				let dateNumber = parseInt(dateString);
-				console.log(dateString, dateNumber);
 				return event.event.date = dateNumber;
 			});
 
